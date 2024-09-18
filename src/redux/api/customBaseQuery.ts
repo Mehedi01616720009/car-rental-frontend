@@ -22,7 +22,7 @@ export const baseQueryWithRefreshToken: BaseQueryFn<
         });
         const refreshToken = await res.json();
 
-        if (!refreshToken?.data?.accessToken) {
+        if (refreshToken?.data?.accessToken) {
             const user = (api.getState() as RootState).auth.user;
             api.dispatch(
                 setUser({
