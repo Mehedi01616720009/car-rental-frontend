@@ -9,18 +9,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authApi } from "@/redux/features/auth/authApi";
-import { useAppDispatch } from "@/redux/hook";
-import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setUser, useCurrentToken } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
+import { Navigate } from "react-router-dom";
 
 const LoginForm = () => {
     const form = useForm();
     const dispatch = useAppDispatch();
-    const [loginAction, { isError, error }] = authApi.useLoginMutation();
-
-    if (isError) {
-        console.log({ error });
-    }
+    const [loginAction] = authApi.useLoginMutation();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const result = await loginAction(data).unwrap();
@@ -31,6 +28,12 @@ const LoginForm = () => {
             dispatch(setUser({ user: result.data, token: result.token }));
         }
     };
+
+    const token = useAppSelector(useCurrentToken);
+
+    if (token) {
+        return <Navigate to={"/"} replace={true} />;
+    }
 
     return (
         <Form {...form}>
