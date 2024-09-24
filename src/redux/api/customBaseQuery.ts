@@ -8,12 +8,25 @@ import { baseQuery } from "./baseApi";
 import { logOut, setUser } from "../features/auth/authSlice";
 import { RootState } from "../store";
 
+type TErrorData = {
+    success: boolean;
+    message: string;
+    errorMessages: {
+        path: string;
+        message: string;
+    }[];
+};
+
 export const baseQueryWithRefreshToken: BaseQueryFn<
     FetchArgs,
     BaseQueryApi,
     DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
     let result = await baseQuery(args, api, extraOptions);
+
+    if (result.error?.status === 404) {
+        console.log((result.error?.data as TErrorData).message);
+    }
 
     if (result.error?.status === 401) {
         const res = await fetch("http://localhost:3000/api/auth/access-token", {
