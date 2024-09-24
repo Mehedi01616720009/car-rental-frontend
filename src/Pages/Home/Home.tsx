@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import NavMenu from "@/components/ui/navmenu";
 import { logOut } from "@/redux/features/auth/authSlice";
 import { carApi } from "@/redux/features/car/carApi";
 import { useAppDispatch } from "@/redux/hook";
@@ -14,8 +15,13 @@ const Home = () => {
 
     return (
         <div>
-            <h1>this is home</h1>
-            <Button onClick={logoutHandler}>Logout</Button>
+            <div className="flex justify-between items-center gap-10 mx-6">
+                <div className="grow">
+                    <NavMenu />
+                </div>
+
+                <Button onClick={logoutHandler}>Logout</Button>
+            </div>
         </div>
     );
 };
